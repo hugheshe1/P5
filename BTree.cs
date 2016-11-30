@@ -207,6 +207,13 @@ namespace Project5
         {
             try
             {
+                List<string> Output = DisplayTree();
+                for (int i = 0; i < Output.Count; i++)
+                {
+                    WriteLine($"\n{Output[i]}");
+                    WriteLine("===============================================");
+                }
+                WriteLine(Stats());
                 for (int i = 1; i < SearchIndex.IndexList.Count; i++)
                 {
                     if (value < SearchIndex.Items[i])
@@ -282,7 +289,7 @@ namespace Project5
             //Insert new index item and leaf
             MainStack.Peek().Insert(newIndexValue, NewLeaf);
 
-            //Reset Root if it's changed
+            //Reset Root if it has changed
             if (MainStack.Count == 1)
             {
                 Root = new Index(MainStack.Peek());
@@ -351,16 +358,12 @@ namespace Project5
 
                     //Set start to half if the Root doesn't
                     //reference any indexes
-                    int rightCount = half + 1;
                     if (isFirstRootSplit)
                     {
-                        rightCount = half;
-                    }
-
-                    //Enter Leaves into RightIndex
-                    for (; rightCount < CurrentIndex.LeafList.Count; rightCount++)
-                    {
-                        RightLeaves.Add(CurrentIndex.LeafList[rightCount]);
+                        for (int rightCount = half; rightCount < CurrentIndex.LeafList.Count; rightCount++)
+                        {
+                            RightLeaves.Add(CurrentIndex.LeafList[rightCount]);
+                        }
                     }
 
                     #endregion
@@ -408,15 +411,12 @@ namespace Project5
                     LeftIndex = new Index(CurrentIndex);
 
                     //Set Right Index Level
-                    RightIndex.IndexLevel = CurrentIndex.IndexLevel + 1;
-                    LeftIndex.IndexLevel = CurrentIndex.IndexLevel + 1;
+                    LeftIndex.IndexLevel = CurrentIndex.IndexLevel;
+                    RightIndex.IndexLevel = CurrentIndex.IndexLevel;
 
-                    //Reference to CenterIndex
+                    //Set and Reference CenterIndex
                     CenterIndex.IndexList.Add(LeftIndex);
-                    CenterIndex.IndexList.Add(RightIndex);
-
-                    //Set and Add CenterIndex
-                    CenterIndex.Items.Add(newIndexItem);
+                    CenterIndex.Insert(newIndexItem, RightIndex);
                     CenterIndex.IndexLevel = 0;
                     Root = new Index(CenterIndex);
 
@@ -454,9 +454,6 @@ namespace Project5
                         RightIndex.Items.Add(CurrentIndex.Items[i]);
                     }
 
-                    WriteLine(RightIndex.IndexList.Count);
-                    ReadKey();
-
                     if (needToGetLeaves)
                     {
                         for (int i = 0; i < RightIndex.Items.Count; i++)
@@ -475,11 +472,7 @@ namespace Project5
                     #endregion
 
                     //Set Right Index Level
-                    RightIndex.IndexLevel = CurrentIndex.IndexLevel + 1;
-
-                    //Add CurrentIndex to the Index up the tree
-                    //with references
-                    MainStack.Peek().Insert(CurrentIndex.Items[half], RightIndex);
+                    RightIndex.IndexLevel = CurrentIndex.IndexLevel;
 
                     //Dispose values
                     int disposeCount = CurrentIndex.Items.Count;
@@ -495,6 +488,10 @@ namespace Project5
                             CurrentIndex.IndexList.RemoveAt(half);
                         }
                     }
+
+                    //Add RightIndex to the Index up the tree
+                    //with references
+                    MainStack.Peek().Insert(newIndexItem, RightIndex);
 
                     //Increment Count
                     TreeIndexes++;

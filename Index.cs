@@ -80,21 +80,19 @@ namespace Project5
             //Initial Values
             int i;
             Items.Add(value);
-            LeafList.Add(NewLeaf);
 
             //Position value to the smallest place it 
             //can go
             for (i = Items.Count - 1; (i > 0 && value < Items[i - 1]); i--)
             {
                 Items[i] = Items[i - 1];
-
-                //Position the matching Leaf List
-                LeafList[i] = LeafList[i - 1];
             }
 
             //Insert the value to the selected position
             Items[i] = value;
-            LeafList[i] = NewLeaf;
+
+            //Set Leaf Reference
+            LeafList.Insert(i, NewLeaf);
         }
 
         /// <summary>
@@ -119,7 +117,7 @@ namespace Project5
             //Insert the value to the selected position
             Items[i] = value;
 
-            //Set Index References
+            //Set Index Reference
             IndexList.Insert(i, RightIndex);
         }
 

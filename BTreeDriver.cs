@@ -72,7 +72,6 @@ namespace Project5
                                     ReadKey();
                                     WriteLine("===============================================");
                                 }
-                                //tree.DisplayTree();
                                 WriteLine(tree.Stats());
                                 ReadKey();
                             }                          
@@ -208,7 +207,7 @@ namespace Project5
             else
             {
                 
-                for (totalAdded = 0; totalAdded <= 20;)
+                for (totalAdded = 0; totalAdded <= 500;)
                 {
                     int randomValue = rand.Next(1001);
                     success = tree.AddedValue(randomValue);
