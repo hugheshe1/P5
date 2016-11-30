@@ -72,7 +72,6 @@ namespace Project5
                                     ReadKey();
                                     WriteLine("===============================================");
                                 }
-                                //tree.DisplayTree();
                                 WriteLine(tree.Stats());
                                 ReadKey();
                             }                          
@@ -80,10 +79,17 @@ namespace Project5
                         case 3:
                             WriteLine("What value do you want to add to the tree? ");
                             response = Convert.ToInt16(ReadLine());
+                            
+                            //ToDo: add validation for input
 
-                            tree.AddedValue(response);
-
-                            WriteLine($"{response} was added to the tree.");
+                            if (tree.AddValue(response))
+                            {
+                                WriteLine($"{response} was added to the tree."); 
+                            }
+                            else
+                            {
+                                WriteLine($"{response} was not added to the tree.");
+                            }
                             WriteLine("\n\n\n\nPress any key to continue...");
                             ReadKey();
                             break;
@@ -208,9 +214,9 @@ namespace Project5
             else
             {
                 
-                for (totalAdded = 0; totalAdded < 25; totalAdded++)
+                for (totalAdded = 0; totalAdded <= 20;) //ToDo: Meep 500
                 {
-                    success = tree.AddedValue(rand.Next(100));
+                    success = tree.AddValue(rand.Next(1001));
 
                     if (success)
                     {
@@ -220,7 +226,6 @@ namespace Project5
                     else
                     {
                         totalAddAttempts++;
-                        totalAdded--;
                     }
                 }
                 totalAdded--;

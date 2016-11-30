@@ -17,3 +17,9 @@ C:\Users\Windows\Downloads\Project5\Project5\obj\Debug\Project5.pdb
 C:\Users\Windows\Downloads\Project5\Project5\obj\Debug\Project5.csprojResolveAssemblyReference.cache
 C:\Users\Windows\Downloads\Project5\Project5\bin\Debug\Project5.exe
 C:\Users\Windows\Downloads\Project5\Project5\bin\Debug\Project5.pdb
+D:\P5-master\P5-master\Project5\bin\Debug\Project5.exe.config
+D:\P5-master\P5-master\Project5\obj\Debug\Project5.exe
+D:\P5-master\P5-master\Project5\obj\Debug\Project5.pdb
+D:\P5-master\P5-master\Project5\bin\Debug\Project5.exe
+D:\P5-master\P5-master\Project5\bin\Debug\Project5.pdb
+D:\P5-master\P5-master\Project5\obj\Debug\Project5.csprojResolveAssemblyReference.cache
