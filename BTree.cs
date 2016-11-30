@@ -176,14 +176,22 @@ namespace Project5
                 }
             }
 
-            //Find Leaf needed to insert into
-            for (int i = 1; i < SearchIndex.Items.Count; i++)
+            try
             {
-                GetNodesTraveled.Add(SearchIndex.LeafList[i].ToString());
-                if (value < SearchIndex.Items[i])
+                //Find Leaf needed to insert into
+                for (int i = 1; i < SearchIndex.Items.Count; i++)
                 {
-                    return SearchIndex.LeafList[i - 1];
+                    GetNodesTraveled.Add(SearchIndex.LeafList[i].ToString());
+                    if (value < SearchIndex.Items[i])
+                    {
+                        return SearchIndex.LeafList[i - 1];
+                    }
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             //Return last leaf in index
@@ -197,13 +205,21 @@ namespace Project5
         /// <param name="value">The specified value</param>
         public Index FindIndex(Index SearchIndex, int value)
         {
-            for (int i = 1; i < SearchIndex.IndexList.Count; i++)
+            try
             {
-                if (value < SearchIndex.Items[i])
+                for (int i = 1; i < SearchIndex.IndexList.Count; i++)
                 {
-                    //Return the previous index
-                    return SearchIndex.IndexList[i - 1];
+                    if (value < SearchIndex.Items[i])
+                    {
+                        //Return the previous index
+                        return SearchIndex.IndexList[i - 1];
+                    }
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             //If value is larger than all put it
@@ -384,7 +400,7 @@ namespace Project5
                         }
                         else
                         {
-                            CurrentIndex.IndexList.RemoveAt(i);
+                            CurrentIndex.IndexList.RemoveAt(half);
                         }
                     }
 
@@ -438,6 +454,9 @@ namespace Project5
                         RightIndex.Items.Add(CurrentIndex.Items[i]);
                     }
 
+                    WriteLine(RightIndex.IndexList.Count);
+                    ReadKey();
+
                     if (needToGetLeaves)
                     {
                         for (int i = 0; i < RightIndex.Items.Count; i++)
@@ -473,7 +492,7 @@ namespace Project5
                         }
                         else
                         {
-                            CurrentIndex.IndexList.RemoveAt(i);
+                            CurrentIndex.IndexList.RemoveAt(half);
                         }
                     }
 

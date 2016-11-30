@@ -208,16 +208,16 @@ namespace Project5
             else
             {
                 
-                for (totalAdded = 0; totalAdded <= 25;)
+                for (totalAdded = 0; totalAdded <= 20;)
                 {
-                    int tempValue = rand.Next(1001);
-                    success = tree.AddedValue(tempValue);
+                    int randomValue = rand.Next(1001);
+                    success = tree.AddedValue(randomValue);
 
                     if (success)
                     {
                         totalAdded++;
                         totalAddAttempts++;
-                        WriteLine($"Value Added: {tempValue}");
+                        WriteLine($"Value Added: {randomValue}");
                         //List<string> TempList = tree.DisplayTree();
                         //for (int i = 0; i < TempList.Count; i++)
                         //{
@@ -231,7 +231,6 @@ namespace Project5
                         totalAddAttempts++;
                     }
                 }
-                totalAdded--;
             }
         }
 
