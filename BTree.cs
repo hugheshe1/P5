@@ -4,9 +4,9 @@
 //	Course:			CSCI 2210-001 - Data Structures
 //	Authors:		Reed Jackson, reedejackson@gmail.com, jacksonre@etsu.edu
 //                  Haley Hughes, hugheshe1@etsu.edu
-//                  Other Author
+//                  John Burdette, burdettj@etsu.edu
 //	Created:		11/23/2016
-//	Copyright:		Reed Jackson, Haley Hughes, Author, 2016
+//	Copyright:		Reed Jackson, Haley Hughes, John Burdette, 2016
 
 using System;
 using System.Collections.Generic;
@@ -388,8 +388,8 @@ namespace Project5
                     LeftIndex = new Index(CurrentIndex);
 
                     //Set Right Index Level
-                    LeftIndex.IndexLevel = CurrentIndex.IndexLevel + 1;
-                    RightIndex.IndexLevel = CurrentIndex.IndexLevel + 1;
+                    LeftIndex.IndexLevel = CurrentIndex.IndexLevel;
+                    RightIndex.IndexLevel = CurrentIndex.IndexLevel;
 
                     //Set and Reference CenterIndex
                     CenterIndex.IndexList.Add(LeftIndex);
@@ -475,7 +475,12 @@ namespace Project5
                     //Add RightIndex to the Index up the tree
                     //with references
                     MainStack.Peek().Insert(newIndexItem, RightIndex);
-                    Root = new Index(MainStack.Peek());
+
+                    //Reset Root if needed
+                    if (MainStack.Count == 1)
+                    {
+                        Root = new Index(MainStack.Peek()); 
+                    }
 
                     //Increment Count
                     TreeIndexes++;
@@ -506,7 +511,6 @@ namespace Project5
                     IncrementAllTreeLevels(SearchIndex.IndexList[i]);
                 }
             }
-            
         }
 
         #endregion
