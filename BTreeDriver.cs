@@ -50,6 +50,7 @@ namespace Project5
             {
                 try
                 {
+                    // clearing screen and displaying menu to the user
                     Clear();
                     MenuDialog();
 
@@ -57,6 +58,7 @@ namespace Project5
                     {
                         #region Case 1
 
+                        // Asking for user input for tree arity
                         case 1:
                             Clear();
                             Write("What is the arity of the tree to be created? ");
@@ -72,6 +74,7 @@ namespace Project5
 
                         #region Case 2
 
+                        // displaying the tree
                         case 2:
                             Clear();
                             if (tree != null)
@@ -94,6 +97,7 @@ namespace Project5
 
                         #region Case 3
 
+                        // adding values to the tree
                         case 3:
                             WriteLine("What value do you want to add to the tree? ");
                             response = Convert.ToInt16(ReadLine());
@@ -116,6 +120,7 @@ namespace Project5
 
                         #region Case 4
 
+                        // searching for value in the tree
                         case 4:
                             WriteLine("What value do you want to find? ");
                             response = Convert.ToInt16(ReadLine());
@@ -154,6 +159,7 @@ namespace Project5
                 }
                 catch (Exception e)
                 {
+                    // displaying error message for faulty user input
                     Clear();
                     WriteLine(e.Message);
                 }
