@@ -3,10 +3,10 @@
 //	Description:	
 //	Course:			CSCI 2210-001 - Data Structures
 //	Authors:		Reed Jackson, reedejackson@gmail.com, jacksonre@etsu.edu
-//                  Other Author
-//                  Other Author
+//                  Haley Hughes, hugheshe1@etsu.edu
+//                  John Burdette, burdettj@etsu.edu
 //	Created:		11/23/2016
-//	Copyright:		Reed Jackson, Author, Author, 2016
+//	Copyright:		Reed Jackson, Haley Hughes, John Burdette, 2016
 
 using System;
 using System.Collections.Generic;
@@ -16,17 +16,30 @@ using System.Threading.Tasks;
 
 namespace Project5
 {
+    /// <summary>
+    /// Class for Leaves on the B Tree
+    /// </summary>
     class Leaf : Node
     {
         #region Constructors
-
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Leaf() { }
 
+        /// <summary>
+        /// Parameterized constructor
+        /// </summary>
+        /// <param name="nodeSize">The number of elements to be contained in a leaf</param>
         public Leaf(int nodeSize)
         {
             NodeSize = nodeSize;
         }
 
+        /// <summary>
+        /// Copy Constructor
+        /// </summary>
+        /// <param name="CopyLeaf">The leaf to be copied</param>
         public Leaf(Leaf CopyLeaf)
         {
             NodeSize = CopyLeaf.NodeSize;
@@ -36,7 +49,11 @@ namespace Project5
         #endregion
 
         #region Insertion Methods
-
+        /// <summary>
+        /// Method for inserting a new value into a leaf
+        /// </summary>
+        /// <param name="value">The value to be added</param>
+        /// <returns>enum telling whether the insertion was a success</returns>
         public INSERT Insert(int value)
         {
             if (Items.Count == 0)
@@ -92,6 +109,10 @@ namespace Project5
         #endregion
 
         #region ToString
+        /// <summary>
+        /// ToString override for the leaf
+        /// </summary>
+        /// <returns>the string containing relevant information</returns>
         public override string ToString ( )
         {
             string result = "\n\nNode type: Leaf";

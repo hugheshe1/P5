@@ -4,9 +4,9 @@
 //	Course:			CSCI 2210-001 - Data Structures
 //	Authors:		Reed Jackson, reedejackson@gmail.com, jacksonre@etsu.edu
 //                  Haley Hughes, hugheshe1@etsu.edu
-//                  Other Author
+//                  John Burdette, burdettj@etsu.edu
 //	Created:		11/23/2016
-//	Copyright:		Reed Jackson, Haley Hughes, Author, 2016
+//	Copyright:		Reed Jackson, Haley Hughes, John Burdette, 2016
 
 using System;
 using System.Collections.Generic;
@@ -176,22 +176,14 @@ namespace Project5
                 }
             }
 
-            try
+            //Find Leaf needed to insert into
+            for (int i = 1; i < SearchIndex.Items.Count; i++)
             {
-                //Find Leaf needed to insert into
-                for (int i = 1; i < SearchIndex.Items.Count; i++)
+                GetNodesTraveled.Add(SearchIndex.LeafList[i].ToString());
+                if (value < SearchIndex.Items[i])
                 {
-                    GetNodesTraveled.Add(SearchIndex.LeafList[i].ToString());
-                    if (value < SearchIndex.Items[i])
-                    {
-                        return SearchIndex.LeafList[i - 1];
-                    }
+                    return SearchIndex.LeafList[i - 1];
                 }
-            }
-            catch (Exception)
-            {
-
-                throw;
             }
 
             //Return last leaf in index
@@ -205,28 +197,13 @@ namespace Project5
         /// <param name="value">The specified value</param>
         public Index FindIndex(Index SearchIndex, int value)
         {
-            try
+            for (int i = 1; i < SearchIndex.IndexList.Count; i++)
             {
-                //List<string> Output = DisplayTree();
-                //for (int i = 0; i < Output.Count; i++)
-                //{
-                //    WriteLine($"\n{Output[i]}");
-                //    WriteLine("===============================================");
-                //}
-                //WriteLine(Stats());
-                for (int i = 1; i < SearchIndex.IndexList.Count; i++)
+                if (value < SearchIndex.Items[i])
                 {
-                    if (value < SearchIndex.Items[i])
-                    {
-                        //Return the previous index
-                        return SearchIndex.IndexList[i - 1];
-                    }
+                    //Return the previous index
+                    return SearchIndex.IndexList[i - 1];
                 }
-            }
-            catch (Exception)
-            {
-
-                throw;
             }
 
             //If value is larger than all put it
@@ -498,7 +475,12 @@ namespace Project5
                     //Add RightIndex to the Index up the tree
                     //with references
                     MainStack.Peek().Insert(newIndexItem, RightIndex);
-                    Root = new Index(MainStack.Peek());
+
+                    //Reset Root if needed
+                    if (MainStack.Count == 1)
+                    {
+                        Root = new Index(MainStack.Peek()); 
+                    }
 
                     //Increment Count
                     TreeIndexes++;
@@ -529,7 +511,6 @@ namespace Project5
                     IncrementAllTreeLevels(SearchIndex.IndexList[i]);
                 }
             }
-            
         }
 
         #endregion
