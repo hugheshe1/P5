@@ -4,9 +4,9 @@
 //	Course:			CSCI 2210-001 - Data Structures
 //	Authors:		Reed Jackson, reedejackson@gmail.com, jacksonre@etsu.edu
 //                  Haley Hughes, hugheshe1@etsu.edu
-//                  Other Author
+//                  John Burdette, burdettj@etsu.edu
 //	Created:		11/23/2016
-//	Copyright:		Reed Jackson, Haley Hughes, Author, 2016
+//	Copyright:		Reed Jackson, Haley Hughes, John Burdette, 2016
 
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
+using System.Threading;
 
 namespace Project5
 {
@@ -22,14 +23,18 @@ namespace Project5
     /// </summary>
     class BTreeDriver
     {
-        #region Properties
+        #region Local Variables
+
         private static Random rand = new Random();
         private static string Menu = string.Empty;
         private static int selection = 0;
-        private static int response = 0;
+        private static string response = string.Empty;
         private static BTree tree;
         private static int totalAdded = 0;
         private static int totalAddAttempts = 0;
+        private static int numOfTreeValues = 20;
+        private static int value = 0;
+
         #endregion
 
         #region Main Method
@@ -51,40 +56,66 @@ namespace Project5
 
                     switch (selection)
                     {
+                        #region Case 1
+
                         case 1:
                             Clear();
                             Write("What is the arity of the tree to be created? ");
-                            response = Convert.ToInt16(ReadLine());
-                            tree = new BTree(response);
+                            response = ReadLine();
+
+                            while (!int.TryParse(response, out value))
+                            {
+                                WriteLine("Invalid entry. Please enter an integer.");
+                                response = ReadLine();
+                            }
+
+                            tree = new BTree(Convert.ToInt32(response));
                             FillTree();
                             WriteLine($"The tree has been built; {totalAdded} values were added in {totalAddAttempts} loops.");
                             WriteLine("\n\n\n\nPress any key to continue...");
                             ReadKey();
                             break;
+
+                        #endregion
+
+                        #region Case 2
+
                         case 2:
                             Clear();
                             if (tree != null)
                             {
                                 List<string> Output = tree.DisplayTree();
+                                WriteLine("===============================================");
                                 for (int i = 0; i < Output.Count; i++)
                                 {
                                     WriteLine($"\n{Output[i]}");
-                                    ReadKey();
                                     WriteLine("===============================================");
+                                    Thread.Sleep(100);
                                 }
                                 WriteLine(tree.Stats());
+                                WriteLine($"Number of Values Added: {totalAdded}");
                                 ReadKey();
-                            }                          
+                            }
                             break;
-                        case 3:
-                            WriteLine("What value do you want to add to the tree? ");
-                            response = Convert.ToInt16(ReadLine());
-                            
-                            //ToDo: add validation for input
 
-                            if (tree.AddValue(response))
+                        #endregion
+
+                        #region Case 3
+
+                        case 3:
+                            Clear();
+                            WriteLine("What value do you want to add to the tree? ");
+                            response = ReadLine();
+
+                            while (!int.TryParse(response, out value))
                             {
-                                WriteLine($"{response} was added to the tree."); 
+                                WriteLine("Invalid entry. Please enter an integer.");
+                                response = ReadLine();
+                            }
+
+                            if (tree.AddValue(Convert.ToInt32(response)))
+                            {
+                                WriteLine($"{response} was added to the tree.");
                             }
                             else
                             {
@@ -93,11 +124,24 @@ namespace Project5
                             WriteLine("\n\n\n\nPress any key to continue...");
                             ReadKey();
                             break;
+
+                        #endregion
+
+                        #region Case 4
+
                         case 4:
+                            Clear();
                             WriteLine("What value do you want to find? ");
-                            response = Convert.ToInt16(ReadLine());
+                            response = ReadLine();
+
+                            while (!int.TryParse(response, out value))
+                            {
+                                WriteLine("Invalid entry. Please enter an integer.");
+                                response = ReadLine();
+                            }
+
                             Leaf leaf = null;
-                            bool match = tree.FindValue(response, out leaf);
+                            bool match = tree.FindValue(Convert.ToInt32(response), out leaf);
 
                             Clear();
 
@@ -117,8 +161,16 @@ namespace Project5
                             WriteLine("\n\n\n\nPress any key to continue...");
                             ReadKey();
                             break;
-                        case 5:
+
+                        #endregion
+
+                        #region Default Case
+
+                        default:
+                            WriteLine("Error: Your selection needs to be an integer 1-5");
                             break;
+
+                            #endregion
                     }
                 }
                 catch (Exception e)
@@ -127,8 +179,8 @@ namespace Project5
                     WriteLine(e.Message);
                 }
             }
-        } 
-        
+        }
+
         #endregion
 
         #region Console Edit
@@ -213,8 +265,8 @@ namespace Project5
                 WriteLine("A tree has not yet been created.");
             else
             {
-                
-                for (totalAdded = 0; totalAdded <= 20;) //ToDo: Meep 500
+                totalAddAttempts = 0;
+                for (totalAdded = 0; totalAdded <= numOfTreeValues;)
                 {
                     success = tree.AddValue(rand.Next(1001));
 
