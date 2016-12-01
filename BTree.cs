@@ -78,7 +78,7 @@ namespace Project5
         /// </summary>
         /// <param name="value">Represents the value to be added</param>
         /// <returns>Boolean representing if the value was added successfully or not</returns>
-        public bool AddedValue(int value)
+        public bool AddValue(int value)
         {
             #region Initialize first value and Root
 
@@ -176,22 +176,14 @@ namespace Project5
                 }
             }
 
-            try
+            //Find Leaf needed to insert into
+            for (int i = 1; i < SearchIndex.Items.Count; i++)
             {
-                //Find Leaf needed to insert into
-                for (int i = 1; i < SearchIndex.Items.Count; i++)
+                GetNodesTraveled.Add(SearchIndex.LeafList[i].ToString());
+                if (value < SearchIndex.Items[i])
                 {
-                    GetNodesTraveled.Add(SearchIndex.LeafList[i].ToString());
-                    if (value < SearchIndex.Items[i])
-                    {
-                        return SearchIndex.LeafList[i - 1];
-                    }
+                    return SearchIndex.LeafList[i - 1];
                 }
-            }
-            catch (Exception)
-            {
-
-                throw;
             }
 
             //Return last leaf in index
@@ -205,28 +197,13 @@ namespace Project5
         /// <param name="value">The specified value</param>
         public Index FindIndex(Index SearchIndex, int value)
         {
-            try
+            for (int i = 1; i < SearchIndex.IndexList.Count; i++)
             {
-                List<string> Output = DisplayTree();
-                for (int i = 0; i < Output.Count; i++)
+                if (value < SearchIndex.Items[i])
                 {
-                    WriteLine($"\n{Output[i]}");
-                    WriteLine("===============================================");
+                    //Return the previous index
+                    return SearchIndex.IndexList[i - 1];
                 }
-                WriteLine(Stats());
-                for (int i = 1; i < SearchIndex.IndexList.Count; i++)
-                {
-                    if (value < SearchIndex.Items[i])
-                    {
-                        //Return the previous index
-                        return SearchIndex.IndexList[i - 1];
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
             }
 
             //If value is larger than all put it
@@ -237,6 +214,7 @@ namespace Project5
         #endregion
 
         #region Find Value Method
+
         /// <summary>
         /// Method to determine if a specified value exists in the BTree
         /// </summary>
@@ -258,6 +236,7 @@ namespace Project5
                 return false;
             }
         }
+
         #endregion
 
         #region Splitting Nodes on Tree Methods
@@ -346,11 +325,9 @@ namespace Project5
 
                 #endregion
 
-                MainStack.Pop();
-
                 #region If split at Root
 
-                if (MainStack.Count == 0)
+                if (MainStack.Count == 1)
                 {
                     //Root = CenterIndex
 
@@ -411,8 +388,8 @@ namespace Project5
                     LeftIndex = new Index(CurrentIndex);
 
                     //Set Right Index Level
-                    LeftIndex.IndexLevel = CurrentIndex.IndexLevel;
-                    RightIndex.IndexLevel = CurrentIndex.IndexLevel;
+                    LeftIndex.IndexLevel = CurrentIndex.IndexLevel + 1;
+                    RightIndex.IndexLevel = CurrentIndex.IndexLevel + 1;
 
                     //Set and Reference CenterIndex
                     CenterIndex.IndexList.Add(LeftIndex);
@@ -426,6 +403,9 @@ namespace Project5
                     //Increment Count
                     TreeIndexes += 2;
                     NodeCount += 2;
+
+                    //Pop stack and move up tree
+                    MainStack.Pop();
                 }
 
                 #endregion
@@ -478,20 +458,24 @@ namespace Project5
                     int disposeCount = CurrentIndex.Items.Count;
                     for (int i = half; i < disposeCount; i++)
                     {
-                        CurrentIndex.Items.RemoveAt(half);
+                        MainStack.Peek().Items.RemoveAt(half);
                         if (needToGetLeaves)
                         {
-                            CurrentIndex.LeafList.RemoveAt(half);
+                            MainStack.Peek().LeafList.RemoveAt(half);
                         }
                         else
                         {
-                            CurrentIndex.IndexList.RemoveAt(half);
+                            MainStack.Peek().IndexList.RemoveAt(half);
                         }
                     }
+
+                    //Pop stack and move up tree
+                    MainStack.Pop();
 
                     //Add RightIndex to the Index up the tree
                     //with references
                     MainStack.Peek().Insert(newIndexItem, RightIndex);
+                    Root = new Index(MainStack.Peek());
 
                     //Increment Count
                     TreeIndexes++;
@@ -546,21 +530,6 @@ namespace Project5
             }
         }
 
-        //public int TotalNumValues()
-        //{
-        //    int values = 0;
-
-        //    // number of indexes
-        //    values += IndexCount;
-
-        //    // adding number of values present in each leaf
-        //    foreach (Leaf l in TreeLeaves)
-        //    {
-        //        values += l.Items.Count;
-        //    }
-
-        //    return values;
-        //}
 
         #endregion
 
@@ -590,52 +559,12 @@ namespace Project5
                         PreOrder.Add(SearchIndex.LeafList[j].ToString());
                 }
             }
-            
+
             //For a Root that has no indexes
             if (SearchIndex.LeafList != null)
             {
                 for (int k = 0; k < SearchIndex.LeafList.Count; k++)
                     PreOrder.Add(SearchIndex.LeafList[k].ToString());
-            }
-        }
-
-        
-
-        /// <summary>
-        /// Recursive method to look over the tree in pre-order and to display each node reached
-        /// </summary>
-        /// <param name="node">The node to start at, should be the root</param>
-        public void PreorderDisplay (Node node)
-        {
-            if (node == null)
-                // Nothing to do when there are no nodes in the B tree
-                return;
-
-            if (node is Leaf)
-            {
-                //show the values in the leaf
-                Console.WriteLine ((Leaf)node);
-                // end this call
-                return;
-            }
-
-            if (node is Index)
-            {
-                Console.WriteLine ((Index)node);
-
-                // checking if the index has a list of indexes (that is, if it doesn't point to leaves)
-                if (((Index)node).IndexList != null)
-                {
-                    //recursively calling for each element of the index list
-                    foreach (Index i in ((Index)node).IndexList)
-                        PreorderDisplay (node);
-                }
-                else
-                {
-                    //recursively calling the method for each element of the leaf list
-                    foreach (Leaf l in ((Index)node).LeafList)
-                        PreorderDisplay (node);
-                }
             }
         }
 
@@ -666,47 +595,11 @@ namespace Project5
             string stats = "";
             stats += $"Number of Index Nodes: {TreeIndexes}";
             stats += $"\nNumber of Leaf Nodes: {TreeLeaves}";
+            stats += $"\nTotal number of nodes in the tree: {NodeCount}";
             stats += $"\nThe depth of the tree is {DeepestDepth}";
-            stats += $"\nTotal number of values in the tree: {NodeCount}";
+            //ToDo in driver: stats += $"\nTotal number of values in the tree: {}";
             return stats;
         }
-
-        ///// <summary>
-        ///// Method for displaying each node in the BTree
-        ///// </summary>
-        ///// <param name="node">Represents the node in the BTree</param>
-        //public void display(Node node)
-        //{
-        //    if (node == null)
-        //        return;
-
-        //    if (node is Leaf)
-        //    {
-        //        //display the values of the leaf
-        //        Console.WriteLine((Leaf)node);
-        //        // end this call
-        //        return;
-        //    }
-
-        //    if (node is Index)
-        //    {
-        //        Console.WriteLine((Index)node);
-
-        //        // checking if the index has a list of indexes (that is, it doesn't point to leaves)
-        //        if (((Index)node).IndexList != null)
-        //        {
-        //            //iterate over each index in the node
-        //            foreach (Index i in ((Index)node).IndexList)
-        //                display(node);
-        //        }
-        //        else
-        //        {
-        //            //display the leaves
-        //            foreach (Leaf l in ((Index)node).LeafList)
-        //                display(node);
-        //        }
-        //    }
-        //}
 
         #endregion 
     }

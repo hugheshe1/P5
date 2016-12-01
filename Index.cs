@@ -131,8 +131,9 @@ namespace Project5
         /// <returns>String representing index information</returns>
         public override string ToString()
         {
-            string result = "\n\nNode type: Index";
-            result += $"\nNode Level: {IndexLevel}";
+            string result = $"\nNode Level: {IndexLevel}";
+            result += "\n______________________________________";
+            result += "\n\nNode type: Index";
             result += base.ToString();
             foreach (int i in Items)
                 result += (i + " ");
