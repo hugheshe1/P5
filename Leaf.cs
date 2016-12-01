@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 
 namespace Project5
 {
+    /// <summary>
+    /// Class for Leaves on the B Tree
+    /// </summary>
     class Leaf : Node
     {
         #region Constructors
@@ -36,7 +39,11 @@ namespace Project5
         #endregion
 
         #region Insertion Methods
-
+        /// <summary>
+        /// Method for inserting a new value into a leaf
+        /// </summary>
+        /// <param name="value">The value to be added</param>
+        /// <returns>enum telling whether the insertion was a success</returns>
         public INSERT Insert(int value)
         {
             if (Items.Count == 0)
@@ -92,6 +99,10 @@ namespace Project5
         #endregion
 
         #region ToString
+        /// <summary>
+        /// ToString override for the leaf
+        /// </summary>
+        /// <returns>the string containing relevant information</returns>
         public override string ToString ( )
         {
             string result = "\n\nNode type: Leaf";
