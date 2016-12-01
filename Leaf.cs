@@ -22,8 +22,11 @@ namespace Project5
     class Leaf : Node
     {
         #region Constructors
-
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public Leaf() { }
+
         /// <summary>
         /// Parameterized constructor
         /// </summary>
