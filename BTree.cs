@@ -281,7 +281,15 @@ namespace Project5
             //Split Index if needed
             if (MainStack.Peek().Items.Count > NodeSize)
             {
-                SplitIndex();
+                try
+                {
+                    SplitIndex();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
         }
 
@@ -354,7 +362,7 @@ namespace Project5
 
                     if (isFirstRootSplit)
                     {
-                        for (int i = 0; i < RightIndex.Items.Count; i++)
+                        for (int i = 0; i < RightLeaves.Count; i++)
                         {
                             RightIndex.LeafList.Add(RightLeaves[i]);
                         }
@@ -387,9 +395,8 @@ namespace Project5
                     //Set Left Index
                     LeftIndex = new Index(CurrentIndex);
 
-                    //Set Right Index Level
-                    LeftIndex.IndexLevel = CurrentIndex.IndexLevel;
-                    RightIndex.IndexLevel = CurrentIndex.IndexLevel;
+                    //Set Right Index LevelS
+                    RightIndex.IndexLevel = LeftIndex.IndexLevel;
 
                     //Set and Reference CenterIndex
                     CenterIndex.IndexList.Add(LeftIndex);
@@ -398,7 +405,7 @@ namespace Project5
                     Root = new Index(CenterIndex);
 
                     //Set Index Levels
-                    IncrementAllTreeLevels(Root);
+                    IncrementAllTreeLevels(Root); 
 
                     //Increment Count
                     TreeIndexes += 2;
@@ -422,7 +429,7 @@ namespace Project5
                         for (int rightCount = half; rightCount < CurrentIndex.LeafList.Count; rightCount++)
                         {
                             RightLeaves.Add(CurrentIndex.LeafList[rightCount]);
-                        } 
+                        }
                     }
 
                     #endregion
@@ -436,7 +443,7 @@ namespace Project5
 
                     if (needToGetLeaves)
                     {
-                        for (int i = 0; i < RightIndex.Items.Count; i++)
+                        for (int i = 0; i < RightLeaves.Count; i++)
                         {
                             RightIndex.LeafList.Add(RightLeaves[i]);
                         }
@@ -448,6 +455,7 @@ namespace Project5
                             RightIndex.IndexList.Add(CurrentIndex.IndexList[i]);
                         }
                     }
+
 
                     #endregion
 
@@ -506,7 +514,7 @@ namespace Project5
                 SearchIndex.IndexList[i].IndexLevel++;
 
                 //Step down if needed
-                if (SearchIndex.IndexList.Count > 0)
+                if (SearchIndex.IndexList[i].IndexList.Count > 0)
                 {
                     IncrementAllTreeLevels(SearchIndex.IndexList[i]);
                 }
@@ -551,7 +559,7 @@ namespace Project5
                 //Add Next String
                 PreOrder.Add(SearchIndex.IndexList[i].ToString());
 
-                if (SearchIndex.IndexList.Count > 0)
+                if (SearchIndex.IndexList[i].IndexList.Count > 0)
                 {
                     //Step down to sub tree
                     PreOrderTraversal(SearchIndex.IndexList[i]);
@@ -559,8 +567,8 @@ namespace Project5
                 else
                 {
                     //Add all Leaf strings
-                    for (int j = 0; j < SearchIndex.LeafList.Count; j++)
-                        PreOrder.Add(SearchIndex.LeafList[j].ToString());
+                    for (int j = 0; j < SearchIndex.IndexList[i].LeafList.Count; j++)
+                        PreOrder.Add(SearchIndex.IndexList[i].LeafList[j].ToString());
                 }
             }
 

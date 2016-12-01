@@ -22,24 +22,14 @@ namespace Project5
     class Leaf : Node
     {
         #region Constructors
-        /// <summary>
-        /// Default constructor
-        /// </summary>
+
         public Leaf() { }
 
-        /// <summary>
-        /// Parameterized constructor
-        /// </summary>
-        /// <param name="nodeSize">The number of elements to be contained in a leaf</param>
         public Leaf(int nodeSize)
         {
             NodeSize = nodeSize;
         }
 
-        /// <summary>
-        /// Copy Constructor
-        /// </summary>
-        /// <param name="CopyLeaf">The leaf to be copied</param>
         public Leaf(Leaf CopyLeaf)
         {
             NodeSize = CopyLeaf.NodeSize;
